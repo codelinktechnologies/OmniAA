@@ -140,6 +140,7 @@ const PROMPT_PRESETS = [
 
 export default function LandingPage({ onLaunchDemo }: LandingPageProps) {
   const [activeFeatureTab, setActiveFeatureTab] = useState<number>(0);
+  const [activeSuiteTool, setActiveSuiteTool] = useState<number>(0);
   const [pricingCycle, setPricingCycle] = useState<"monthly" | "yearly">("yearly");
   
   // Interactive Demo State
@@ -1203,46 +1204,69 @@ export default function LandingPage({ onLaunchDemo }: LandingPageProps) {
 
       {/* Interactive Audit and Agent Creator Modules (Addictive Features 1, 2, 3 & 4) */}
       <section id="interactive-tools" className="py-24 px-6 border-b border-slate-200/80 bg-gradient-to-b from-slate-50/50 to-white relative z-10">
-        <div className="max-w-6xl mx-auto space-y-16">
-          
-          <div className="text-center space-y-3">
-            <span className="text-xs font-bold text-purple-600 font-mono tracking-widest uppercase block">HIGH-CONVERSION RADAR & INTERACTIVE SUITE</span>
-            <h2 className="text-3xl sm:text-4.5xl font-extrabold text-slate-900 tracking-tight leading-tight">
-              Test Our Client-Getting Automation Live
+        <div className="max-w-5xl mx-auto space-y-10">
+
+          <div className="text-center space-y-3 max-w-2xl mx-auto">
+            <span className="text-xs font-bold text-purple-600 font-mono tracking-widest uppercase block">Interactive Suite</span>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
+              Try the Automation Live
             </h2>
-            <p className="text-slate-600 text-sm max-w-2xl mx-auto leading-relaxed">
-              Simulate our 2.0 pipeline in real-time. Uncover critical booking gaps, construct custom virtual employees, interact with our instant SMS-handshake engine, and calculate your conversion cash bleed.
+            <p className="text-slate-600 text-sm leading-relaxed">
+              Pick a tool below to test-drive the pipeline. One step at a time, no clutter.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-            
-            {/* Feature 1: Live Domain Gap Audit */}
-            <div className="space-y-4">
-              <LiveAuditSimulator />
-            </div>
+          {(() => {
+            const suiteTools = [
+              { label: "Lead Audit", icon: Search },
+              { label: "Build an Agent", icon: Cpu },
+              { label: "SMS Sandbox", icon: MessageSquare },
+              { label: "Revenue Calculator", icon: BarChart3 },
+            ];
+            return (
+              <>
+                {/* Tab selector */}
+                <div className="flex flex-wrap justify-center gap-2">
+                  {suiteTools.map((tool, index) => {
+                    const Icon = tool.icon;
+                    const isActive = activeSuiteTool === index;
+                    return (
+                      <button
+                        key={tool.label}
+                        onClick={() => setActiveSuiteTool(index)}
+                        className={`flex items-center gap-2 px-4 py-2.5 rounded-full text-xs font-bold transition-all border ${
+                          isActive
+                            ? "bg-purple-600 text-white border-purple-600 shadow-md shadow-purple-200"
+                            : "bg-white text-slate-600 border-slate-200 hover:border-purple-300 hover:text-purple-600"
+                        }`}
+                      >
+                        <Icon className="h-4 w-4" />
+                        {tool.label}
+                      </button>
+                    );
+                  })}
+                </div>
 
-            {/* Feature 2: Construct-An-Agent Wizard */}
-            <div className="space-y-4">
-              <AgentCustomizer onDeploy={onLaunchDemo} />
-            </div>
-
-          </div>
-
-          {/* Features 3 & 4 Row */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start pt-8 border-t border-slate-100">
-            
-            {/* Feature 3: Conversational Simulator */}
-            <div className="space-y-4">
-              <ConversationalSimulator />
-            </div>
-
-            {/* Feature 4: Funnel Leakage Analyzer */}
-            <div className="space-y-4">
-              <FrictionFunnelAnalyzer onDeploy={onLaunchDemo} />
-            </div>
-
-          </div>
+                {/* Active tool panel */}
+                <div className="max-w-3xl mx-auto">
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={activeSuiteTool}
+                      initial={{ opacity: 0, y: 12 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -12 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      {activeSuiteTool === 0 && <LiveAuditSimulator />}
+                      {activeSuiteTool === 1 && <AgentCustomizer onDeploy={onLaunchDemo} />}
+                      {activeSuiteTool === 2 && <ConversationalSimulator />}
+                      {activeSuiteTool === 3 && <FrictionFunnelAnalyzer onDeploy={onLaunchDemo} />}
+                    </motion.div>
+                  </AnimatePresence>
+                </div>
+              </>
+            );
+          })()}
 
         </div>
       </section>
