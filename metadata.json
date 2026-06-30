@@ -1,0 +1,6 @@
+{
+  "name": "OmniAgentAI",
+  "description": "An autonomous AI business agent that runs your marketing, lead scraping, outreach, content publishing, and revenue reporting directly from WhatsApp or Telegram.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
